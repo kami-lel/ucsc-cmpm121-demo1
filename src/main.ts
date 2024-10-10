@@ -31,8 +31,11 @@ start_button.addEventListener("click", () => {
 });
 
 
-// infinite loop using setInterval
-setInterval(() => {
-    burger_cnt++;
-    burger_counter_element.innerHTML = `${burger_cnt} burgers`;
-}, 1000); // updates every 1000 ms (1 second)
+function auto_increase() {
+  burger_cnt++;
+  burger_counter_element.innerHTML = `${burger_cnt} burgers`;
+  requestAnimationFrame(auto_increase)
+}
+
+
+requestAnimationFrame(auto_increase)
