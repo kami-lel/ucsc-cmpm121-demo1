@@ -3,10 +3,20 @@ import "./style.css";
 // constant declaration
 const GAMENAME = "Burger Cooking Mania";
 const INIT_BURGER_CNT = 0;
-const PURCHASE_A_COST = 10;
-const PURCHASE_B_COST = 100;
-const PURCHASE_C_COST = 1000;
 const PURHCASE_GROWTH_RATE = 1.15;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // set up HTML document & app
 document.title = GAMENAME;
@@ -38,7 +48,19 @@ burger_button_element.addEventListener("click", () => {
 
 app.append(burger_button_element);
 
-// upgradable
+
+
+
+
+
+
+
+
+
+
+
+
+// upgradable realted
 const upgradable_table_element = document.createElement("table");
 upgradable_table_element.innerHTML = `
   <thead>
@@ -51,7 +73,7 @@ upgradable_table_element.innerHTML = `
   </thead>
   <tbody>
     <tr>
-      <td>Grill Booster Pack</td>
+      <td id='name-a'></td>
       <td>
         <button class='button' id='button-a'></button>
       </td>
@@ -59,7 +81,7 @@ upgradable_table_element.innerHTML = `
       <td id='rate-a'></td>
     </tr>
     <tr>
-      <td>Ingredient Refill Bundle</td>
+      <td id='name-b'></td>
       <td>
         <button class='button' id='button-b'></button>
       </td>
@@ -67,7 +89,7 @@ upgradable_table_element.innerHTML = `
       <td id='rate-b'></td>
     </tr>
     <tr>
-      <td>Chef Assistant Boost</td>
+      <td id='name-c'></td>
       <td>
         <button class='button' id='button-c'></button>
       </td>
@@ -84,39 +106,56 @@ upgradable_table_element.innerHTML = `
 `;
 app.append(upgradable_table_element);
 
-class Upgradable {
-  count: number = 0;
-  cost: number;
-  name: string;
 
-  multiplier: number;
+interface Item {
+  name: string,
+  cost: number,
+  rate: number
+};
+
+
+class Upgradable implements Item {
+  name: string;
+  cost: number;
+  rate: number;
+
+  count: number = 1;
+  code_name: string;
   button_element: HTMLButtonElement | null;
   count_element: HTMLElement | null;
   rate_element: HTMLElement | null;
 
-  constructor(cost: number, multiplier: number, name: string) {
-    this.cost = cost;
-    this.multiplier = multiplier;
+  constructor(name: string, code_name: string, cost: number, rate: number) {
     this.name = name;
+    this.code_name = code_name;
+    this.cost = cost;
+    this.rate = rate;
 
-    this.button_element = document.getElementById(
-      `button-${name}`,
-    ) as HTMLButtonElement;
+
+    this.button_element = document.getElementById(`button-${code_name}`) as HTMLButtonElement;
     if (this.button_element) {
       this.button_element.addEventListener("click", () => {
-        console.log(`purchase button ${this.name} clicked!`);
+        console.log(`purchase button ${this.code_name} clicked!`);
         burger_count.value -= this.cost;
         this.count++;
         this.cost *= PURHCASE_GROWTH_RATE;
       });
     }
 
-    this.count_element = document.getElementById(`count-${name}`);
-    this.rate_element = document.getElementById(`rate-${name}`);
+    this.count_element = document.getElementById(`count-${code_name}`);
+    this.rate_element = document.getElementById(`rate-${code_name}`);
+
+
+    // update header name
+    const header_element = document.getElementById(`name-${code_name}`);
+    if (header_element) {
+      header_element.innerText = this.name;
+    }
+
   }
 
   get per_sec_rate(): number {
-    return this.count * this.multiplier;
+    return this.count * this.rate;
   }
 
   calc_addition(time_delta: number): number {
@@ -138,42 +177,58 @@ class Upgradable {
   }
 }
 
-const upgradable_a = new Upgradable(PURCHASE_A_COST, 0.1, "a");
-const upgradable_b = new Upgradable(PURCHASE_B_COST, 2, "b");
-const upgradable_c = new Upgradable(PURCHASE_C_COST, 50, "c");
+
+const upgradables : Upgradable[] = [
+  new Upgradable('Grill Booster Pack', 'a', 10, 0.1),
+  new Upgradable('Ingredient Refill Bundle', 'b', 100, 2),
+  new Upgradable('Chef Assistant Boost', 'c', 1000, 50)
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // main update loop
 
 let _last_time: number = performance.now();
 let time_delta: number = 0;
 
+
 const total_rate_element = document.getElementById("rate-total");
 if (!total_rate_element) {
   console.error("Total rate element not found.");
 }
 
+
 function update() {
   time_delta = (performance.now() - _last_time) / 1000; // sec since last update
   _last_time = performance.now();
 
-  upgradable_a.update();
-  upgradable_b.update();
-  upgradable_c.update();
-  burger_count.update();
+  let total_addition = 0
+  let total_rate = 0
+  for (const upgradable of upgradables) {
+    upgradable.update();
+    total_addition += upgradable.calc_addition(time_delta);
+    total_rate += upgradable.per_sec_rate;
+  }
 
-  const total_addition =
-    upgradable_a.calc_addition(time_delta) +
-    upgradable_b.calc_addition(time_delta) +
-    upgradable_c.calc_addition(time_delta);
   burger_count.value += total_addition;
 
-  const total_rate =
-    upgradable_a.per_sec_rate +
-    upgradable_b.per_sec_rate +
-    upgradable_c.per_sec_rate;
   if (total_rate_element) {
     total_rate_element.innerText = `${total_rate.toFixed(3)}`;
   }
+
+  burger_count.update();
 
   requestAnimationFrame(update);
 }
