@@ -7,17 +7,6 @@ const PURHCASE_GROWTH_RATE = 1.15;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // set up HTML document & app
 document.title = GAMENAME;
 const app: HTMLDivElement = document.querySelector("#app")!;
@@ -48,18 +37,6 @@ burger_button_element.addEventListener("click", () => {
 
 app.append(burger_button_element);
 
-
-
-
-
-
-
-
-
-
-
-
-
 // upgradable realted
 const upgradable_table_element = document.createElement("table");
 upgradable_table_element.innerHTML = `
@@ -69,6 +46,7 @@ upgradable_table_element.innerHTML = `
       <th>Purchase\n(burgers/purchase)</th>
       <th>Owned</th>
       <th>Contribution\n(burgers/sec)</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -79,6 +57,7 @@ upgradable_table_element.innerHTML = `
       </td>
       <td id='count-a'></td>
       <td id='rate-a'></td>
+      <td>🔥 Ignite your grills with extra power and speed, ensuring every meal is a smoky sensation!</td>
     </tr>
     <tr>
       <td id='name-b'></td>
@@ -87,6 +66,7 @@ upgradable_table_element.innerHTML = `
       </td>
       <td id='count-b'></td>
       <td id='rate-b'></td>
+      <td>🛒 Keep your pantry perpetually stocked with all the essentials for endless culinary creativity.</td>
     </tr>
     <tr>
       <td id='name-c'></td>
@@ -95,24 +75,44 @@ upgradable_table_element.innerHTML = `
       </td>
       <td id='count-c'></td>
       <td id='rate-c'></td>
+      <td>👨‍🍳 Gain a virtual sous-chef to help streamline your kitchen tasks and elevate your cooking game.</td>
+    </tr>
+    <tr>
+      <td id='name-d'></td>
+      <td>
+        <button class='button' id='button-d'></button>
+      </td>
+      <td id='count-d'></td>
+      <td id='rate-d'></td>
+      <td>📜 Unlock exclusive recipes from top chefs to transform your menu into a gourmet paradise.</td>
+    </tr>
+    <tr>
+      <td id='name-e'></td>
+      <td>
+        <button class='button' id='button-e'></button>
+      </td>
+      <td id='count-e'></td>
+      <td id='rate-e'></td>
+      <td>🍴 Revamp your kitchen with premium appliances and decor that redefine culinary elegance.</td>
     </tr>
     <tr>
       <td>total</td>
       <td></td>
       <td></td>
       <td id='rate-total'></td>
+      <td></td>
     </tr>
   </tbody>
 `;
+
+
 app.append(upgradable_table_element);
 
-
 interface Item {
-  name: string,
-  cost: number,
-  rate: number
-};
-
+  name: string;
+  cost: number;
+  rate: number;
+}
 
 class Upgradable implements Item {
   name: string;
@@ -131,8 +131,9 @@ class Upgradable implements Item {
     this.cost = cost;
     this.rate = rate;
 
-
-    this.button_element = document.getElementById(`button-${code_name}`) as HTMLButtonElement;
+    this.button_element = document.getElementById(
+      `button-${code_name}`,
+    ) as HTMLButtonElement;
     if (this.button_element) {
       this.button_element.addEventListener("click", () => {
         console.log(`purchase button ${this.code_name} clicked!`);
@@ -145,13 +146,11 @@ class Upgradable implements Item {
     this.count_element = document.getElementById(`count-${code_name}`);
     this.rate_element = document.getElementById(`rate-${code_name}`);
 
-
     // update header name
     const header_element = document.getElementById(`name-${code_name}`);
     if (header_element) {
       header_element.innerText = this.name;
     }
-
   }
 
   get per_sec_rate(): number {
@@ -178,23 +177,13 @@ class Upgradable implements Item {
 }
 
 
-const upgradables : Upgradable[] = [
-  new Upgradable('Grill Booster Pack', 'a', 10, 0.1),
-  new Upgradable('Ingredient Refill Bundle', 'b', 100, 2),
-  new Upgradable('Chef Assistant Boost', 'c', 1000, 50)
+const upgradables: Upgradable[] = [
+  new Upgradable("Grill Booster Pack", "a", 10, 0.1),
+  new Upgradable("Ingredient Refill Bundle", "b", 100, 2),
+  new Upgradable("Chef Assistant Boost", "c", 1000, 50),
+  new Upgradable("Gourmet Recipe Collection", "d", 5000, 200),
+  new Upgradable("Luxury Kitchen Upgrade", "e", 25000, 1000)
 ];
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -203,19 +192,17 @@ const upgradables : Upgradable[] = [
 let _last_time: number = performance.now();
 let time_delta: number = 0;
 
-
 const total_rate_element = document.getElementById("rate-total");
 if (!total_rate_element) {
   console.error("Total rate element not found.");
 }
 
-
 function update() {
   time_delta = (performance.now() - _last_time) / 1000; // sec since last update
   _last_time = performance.now();
 
-  let total_addition = 0
-  let total_rate = 0
+  let total_addition = 0;
+  let total_rate = 0;
   for (const upgradable of upgradables) {
     upgradable.update();
     total_addition += upgradable.calc_addition(time_delta);
