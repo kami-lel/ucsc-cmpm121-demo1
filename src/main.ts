@@ -1,8 +1,8 @@
 import "./style.css";
 
 // constant declaration
-const GAMENAME = "My not so amazing game";
-const INIT_BURGER_CNT = 2000;
+const GAMENAME = "Burger Cooking Mania";
+const INIT_BURGER_CNT = 0;
 const PURCHASE_A_COST = 10;
 const PURCHASE_B_COST = 100;
 const PURCHASE_C_COST = 1000;
@@ -51,7 +51,7 @@ upgradable_table_element.innerHTML = `
   </thead>
   <tbody>
     <tr>
-      <td>A</td>
+      <td>Grill Booster Pack</td>
       <td>
         <button class='button' id='button-a'></button>
       </td>
@@ -59,7 +59,7 @@ upgradable_table_element.innerHTML = `
       <td id='rate-a'></td>
     </tr>
     <tr>
-      <td>B</td>
+      <td>Ingredient Refill Bundle</td>
       <td>
         <button class='button' id='button-b'></button>
       </td>
@@ -67,7 +67,7 @@ upgradable_table_element.innerHTML = `
       <td id='rate-b'></td>
     </tr>
     <tr>
-      <td>C</td>
+      <td>Chef Assistant Boost</td>
       <td>
         <button class='button' id='button-c'></button>
       </td>
@@ -99,7 +99,9 @@ class Upgradable {
     this.multiplier = multiplier;
     this.name = name;
 
-    this.button_element = document.getElementById(`button-${name}`) as HTMLButtonElement;
+    this.button_element = document.getElementById(
+      `button-${name}`,
+    ) as HTMLButtonElement;
     if (this.button_element) {
       this.button_element.addEventListener("click", () => {
         console.log(`purchase button ${this.name} clicked!`);
