@@ -2,10 +2,11 @@ import "./style.css";
 
 // constant declaration
 const GAMENAME = "My not so amazing game";
-const INIT_BURGER_CNT = 1000;
+const INIT_BURGER_CNT = 2000;
 const PURCHASE_A_COST = 10;
 const PURCHASE_B_COST = 100;
 const PURCHASE_C_COST = 1000;
+const PURHCASE_GROWTH_RATE = 1.15;
 
 // set up HTML document & app
 document.title = GAMENAME;
@@ -43,18 +44,16 @@ upgradable_table_element.innerHTML = `
   <thead>
     <tr>
       <th></th>
-      <th>Purchase</th>
+      <th>Purchase\n(burgers/purchase)</th>
       <th>Owned</th>
-      <th>Contribution\n(burges/sec)</th>
+      <th>Contribution\n(burgers/sec)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>A</td>
       <td>
-        <button class='button' id='button-a'>
-          ${PURCHASE_A_COST} burgers/purchase
-        </button>
+        <button class='button' id='button-a'></button>
       </td>
       <td id='count-a'></td>
       <td id='rate-a'></td>
@@ -62,9 +61,7 @@ upgradable_table_element.innerHTML = `
     <tr>
       <td>B</td>
       <td>
-        <button class='button' id='button-b'>
-          ${PURCHASE_B_COST} burgers/purchase
-        </button>
+        <button class='button' id='button-b'></button>
       </td>
       <td id='count-b'></td>
       <td id='rate-b'></td>
@@ -72,9 +69,7 @@ upgradable_table_element.innerHTML = `
     <tr>
       <td>C</td>
       <td>
-        <button class='button' id='button-c'>
-          ${PURCHASE_C_COST} burgers/purchase
-        </button>
+        <button class='button' id='button-c'></button>
       </td>
       <td id='count-c'></td>
       <td id='rate-c'></td>
@@ -110,6 +105,7 @@ class Upgradable {
         console.log(`purchase button ${this.name} clicked!`);
         burger_count.value -= this.cost;
         this.count++;
+        this.cost *= PURHCASE_GROWTH_RATE;
       });
     }
 
@@ -128,6 +124,8 @@ class Upgradable {
   update(): void {
     if (this.button_element) {
       this.button_element.disabled = burger_count.value < this.cost;
+
+      this.button_element.innerText = `${this.cost.toFixed(3)}`;
     }
     if (this.count_element) {
       this.count_element.innerText = this.count.toString();
@@ -141,18 +139,6 @@ class Upgradable {
 const upgradable_a = new Upgradable(PURCHASE_A_COST, 0.1, "a");
 const upgradable_b = new Upgradable(PURCHASE_B_COST, 2, "b");
 const upgradable_c = new Upgradable(PURCHASE_C_COST, 50, "c");
-
-
-
-
-
-
-
-
-
-
-
-
 
 // main update loop
 
@@ -177,7 +163,7 @@ function update() {
     upgradable_a.calc_addition(time_delta) +
     upgradable_b.calc_addition(time_delta) +
     upgradable_c.calc_addition(time_delta);
-    burger_count.value += total_addition;
+  burger_count.value += total_addition;
 
   const total_rate =
     upgradable_a.per_sec_rate +
