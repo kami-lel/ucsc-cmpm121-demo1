@@ -119,7 +119,7 @@ class Upgradable implements Item {
   cost: number;
   rate: number;
 
-  count: number = 1;
+  count: number = 0;
   code_name: string;
   button_element: HTMLButtonElement | null;
   count_element: HTMLElement | null;
