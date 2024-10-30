@@ -116,15 +116,15 @@ interface Item {
 }
 
 class Upgradable implements Item {
-  name: string;
-  cost: number;
-  rate: number;
+  public name: string;
+  public cost: number;
+  public rate: number;
 
-  count: number = 0;
-  codeName: string;
-  buttonElement: HTMLButtonElement | null;
-  countElement: HTMLElement | null;
-  rateElement: HTMLElement | null;
+  private count: number = 0; // make count private
+  private codeName: string;
+  private buttonElement: HTMLButtonElement | null;
+  private countElement: HTMLElement | null;
+  private rateElement: HTMLElement | null;
 
   constructor(name: string, codeName: string, cost: number, rate: number) {
     this.name = name;
@@ -154,15 +154,15 @@ class Upgradable implements Item {
     }
   }
 
-  get perSecondRate(): number {
+  public get perSecondRate(): number { // make accessor public
     return this.count * this.rate;
   }
 
-  calculateAddition(timeDelta: number): number {
+  public calculateAddition(timeDelta: number): number { // make method public
     return timeDelta * this.perSecondRate;
   }
 
-  update(): void {
+  public update(): void { // make method public
     if (this.buttonElement) {
       this.buttonElement.disabled = burgerCounter.value < this.cost;
 
@@ -177,12 +177,13 @@ class Upgradable implements Item {
   }
 }
 
+
 const upgradables: Upgradable[] = [
   new Upgradable("Grill Booster Pack", "a", PURCHASE_A_COST, 0.1),
   new Upgradable("Ingredient Refill Bundle", "b", PURCHASE_B_COST, 2),
   new Upgradable("Chef Assistant Boost", "c", PURCHASE_C_COST, 50),
   new Upgradable("Gourmet Recipe Collection", "d", PURCHASE_D_COST, 200),
-  new Upgradable("Luxury Kitchen Upgrade", "e", PURCHASE_E_COST, 1000)
+  new Upgradable("Luxury Kitchen Upgrade", "e", PURCHASE_E_COST, 1000),
 ];
 
 // main update loop
