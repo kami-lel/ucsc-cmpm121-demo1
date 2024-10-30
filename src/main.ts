@@ -21,6 +21,8 @@ const burgerCounter = {
     this.html_element.innerText = `${this.value.toFixed(5)} burgers`;
   },
 };
+
+burgerCounter.html_element.style.backgroundColor = 'black';
 app.append(burgerCounter.html_element);
 
 // burger button

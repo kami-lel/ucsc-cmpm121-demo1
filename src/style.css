@@ -78,6 +78,7 @@ button:focus-visible {
 table {
   width: 50%;
   border-collapse: collapse;
+  background-color: rgba(0, 0, 0, 0.75); /* 50% transparent black */
 }
 
 th,
