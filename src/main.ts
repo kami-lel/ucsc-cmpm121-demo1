@@ -22,7 +22,7 @@ const burgerCounter = {
   },
 };
 
-burgerCounter.html_element.style.backgroundColor = 'black';
+burgerCounter.html_element.style.backgroundColor = "black";
 app.append(burgerCounter.html_element);
 
 // burger button
@@ -40,68 +40,75 @@ app.append(burgerButtonElement);
 // upgradable
 const upgradableTableElement = document.createElement("table");
 upgradableTableElement.innerHTML = `
-  <thead>
+<thead>
     <tr>
-      <th></th>
-      <th>Purchase\n(burgers/purchase)</th>
-      <th>Owned</th>
-      <th>Contribution\n(burgers/sec)</th>
+        <th></th>
+        <th></th>
+        <th>Purchase<br>(burgers/purchase)</th>
+        <th>Owned</th>
+        <th>Contribution<br>(burgers/sec)</th>
     </tr>
-  </thead>
-  <tbody>
+</thead>
+<tbody>
     <tr>
-      <td id='name-a'></td>
-      <td>
-        <button class='button' id='button-a'></button>
-      </td>
-      <td id='count-a'></td>
-      <td id='rate-a'></td>
-      <td>🛒 Keep your pantry perpetually stocked with all the essentials for endless culinary creativity.</td>
-    </tr>
-    <tr>
-      <td id='name-b'></td>
-      <td>
-        <button class='button' id='button-b'></button>
-      </td>
-      <td id='count-b'></td>
-      <td id='rate-b'></td>
-      <td>👨‍🍳 Gain a virtual sous-chef to help streamline your kitchen tasks and elevate your cooking game.</td>
+        <td id='name-a'></td>
+        <td><img src='./assets/a.png'/></td>
+        <td>
+            <button class='button' id='button-a'></button>
+        </td>
+        <td id='count-a'></td>
+        <td id='rate-a'></td>
+        <td>🛒 Keep your pantry perpetually stocked with all the essentials for endless culinary creativity.</td>
     </tr>
     <tr>
-      <td id='name-c'></td>
-      <td>
-        <button class='button' id='button-c'></button>
-      </td>
-      <td id='count-c'></td>
-      <td id='rate-c'></td>
-      <td>📜 Unlock exclusive recipes from top chefs to transform your menu into a gourmet paradise.</td>
+        <td id='name-b'></td>
+        <td><img src='./assets/b.png'/></td>
+        <td>
+            <button class='button' id='button-b'></button>
+        </td>
+        <td id='count-b'></td>
+        <td id='rate-b'></td>
+        <td>👨‍🍳 Gain a virtual sous-chef to help streamline your kitchen tasks and elevate your cooking game.</td>
     </tr>
     <tr>
-      <td id='name-d'></td>
-      <td>
-        <button class='button' id='button-d'></button>
-      </td>
-      <td id='count-d'></td>
-      <td id='rate-d'></td>
-      <td>📜 Unlock exclusive recipes from top chefs to transform your menu into a gourmet paradise.</td>
+        <td id='name-c'></td>
+        <td><img src='./assets/c.png'/></td>
+        <td>
+            <button class='button' id='button-c'></button>
+        </td>
+        <td id='count-c'></td>
+        <td id='rate-c'></td>
+        <td>📜 Unlock exclusive recipes from top chefs to transform your menu into a gourmet paradise.</td>
     </tr>
     <tr>
-      <td id='name-e'></td>
-      <td>
-        <button class='button' id='button-e'></button>
-      </td>
-      <td id='count-e'></td>
-      <td id='rate-e'></td>
-      <td>🍴 Revamp your kitchen with premium appliances and decor that redefine culinary elegance.</td>
+        <td id='name-d'></td>
+        <td><img src='./assets/d.png'/></td>
+        <td>
+            <button class='button' id='button-d'></button>
+        </td>
+        <td id='count-d'></td>
+        <td id='rate-d'></td>
+        <td>📜 Unlock exclusive recipes from top chefs to transform your menu into a gourmet paradise.</td>
     </tr>
     <tr>
-      <td>Total</td>
-      <td></td>
-      <td></td>
-      <td id='rate-total'></td>
-      <td></td>
+        <td id='name-e'></td>
+        <td><img src='./assets/e.png'/></td>
+        <td>
+            <button class='button' id='button-e'></button>
+        </td>
+        <td id='count-e'></td>
+        <td id='rate-e'></td>
+        <td>🍴 Revamp your kitchen with premium appliances and decor that redefine culinary elegance.</td>
     </tr>
-  </tbody>
+    <tr>
+        <td>Total</td>
+        <td></td> <!-- New cell for total cost -->
+        <td></td>
+        <td id='rate-total'></td>
+        <td></td>
+    </tr>
+</tbody>
+
 `;
 
 app.append(upgradableTableElement);
