@@ -1,52 +1,54 @@
 import "./style.css";
 
 // constant declaration
-const GAMENAME = "Burger Cooking Mania";
-const INIT_BURGER_CNT = 0;
-const PURHCASE_GROWTH_RATE = 1.15;
-
-
+const GAME_NAME = "Burger Cooking Mania";
+const INITIAL_BURGER_COUNT = 0;
+const PURCHASE_A_COST = 10;
+const PURCHASE_B_COST = 100;
+const PURCHASE_C_COST = 1000;
+const PURCHASE_D_COST = 5000;
+const PURCHASE_E_COST = 25000;
+const PURCHASE_GROWTH_RATE = 1.15;
 
 // set up HTML document & app
-document.title = GAMENAME;
+document.title = GAME_NAME;
 const app: HTMLDivElement = document.querySelector("#app")!;
 const header = document.createElement("h1");
-header.innerHTML = GAMENAME;
+header.innerHTML = GAME_NAME;
 app.append(header);
 
 // create count number
-const burger_count = {
+const burgerCounter = {
   html_element: document.createElement("div"),
-  value: INIT_BURGER_CNT,
+  value: INITIAL_BURGER_COUNT,
 
-  update(): void {
+  updateDisplay(): void {
     this.html_element.innerText = `${this.value.toFixed(5)} burgers`;
   },
 };
-app.append(burger_count.html_element);
+app.append(burgerCounter.html_element);
 
 // burger button
-const burger_button_element = document.createElement("button");
-burger_button_element.innerText = "🍔";
-burger_button_element.className = "button"; // for style
+const burgerButtonElement = document.createElement("button");
+burgerButtonElement.innerText = "🍔";
+burgerButtonElement.className = "button"; // for style
 
-burger_button_element.addEventListener("click", () => {
+burgerButtonElement.addEventListener("click", () => {
   console.log("Burger button clicked!");
-  burger_count.value++;
+  burgerCounter.value++;
 });
 
-app.append(burger_button_element);
+app.append(burgerButtonElement);
 
-// upgradable realted
-const upgradable_table_element = document.createElement("table");
-upgradable_table_element.innerHTML = `
+// upgradable
+const upgradableTableElement = document.createElement("table");
+upgradableTableElement.innerHTML = `
   <thead>
     <tr>
       <th></th>
       <th>Purchase\n(burgers/purchase)</th>
       <th>Owned</th>
       <th>Contribution\n(burgers/sec)</th>
-      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -57,7 +59,7 @@ upgradable_table_element.innerHTML = `
       </td>
       <td id='count-a'></td>
       <td id='rate-a'></td>
-      <td>🔥 Ignite your grills with extra power and speed, ensuring every meal is a smoky sensation!</td>
+      <td>🛒 Keep your pantry perpetually stocked with all the essentials for endless culinary creativity.</td>
     </tr>
     <tr>
       <td id='name-b'></td>
@@ -66,7 +68,7 @@ upgradable_table_element.innerHTML = `
       </td>
       <td id='count-b'></td>
       <td id='rate-b'></td>
-      <td>🛒 Keep your pantry perpetually stocked with all the essentials for endless culinary creativity.</td>
+      <td>👨‍🍳 Gain a virtual sous-chef to help streamline your kitchen tasks and elevate your cooking game.</td>
     </tr>
     <tr>
       <td id='name-c'></td>
@@ -75,7 +77,7 @@ upgradable_table_element.innerHTML = `
       </td>
       <td id='count-c'></td>
       <td id='rate-c'></td>
-      <td>👨‍🍳 Gain a virtual sous-chef to help streamline your kitchen tasks and elevate your cooking game.</td>
+      <td>📜 Unlock exclusive recipes from top chefs to transform your menu into a gourmet paradise.</td>
     </tr>
     <tr>
       <td id='name-d'></td>
@@ -96,7 +98,7 @@ upgradable_table_element.innerHTML = `
       <td>🍴 Revamp your kitchen with premium appliances and decor that redefine culinary elegance.</td>
     </tr>
     <tr>
-      <td>total</td>
+      <td>Total</td>
       <td></td>
       <td></td>
       <td id='rate-total'></td>
@@ -105,8 +107,7 @@ upgradable_table_element.innerHTML = `
   </tbody>
 `;
 
-
-app.append(upgradable_table_element);
+app.append(upgradableTableElement);
 
 interface Item {
   name: string;
@@ -120,102 +121,99 @@ class Upgradable implements Item {
   rate: number;
 
   count: number = 0;
-  code_name: string;
-  button_element: HTMLButtonElement | null;
-  count_element: HTMLElement | null;
-  rate_element: HTMLElement | null;
+  codeName: string;
+  buttonElement: HTMLButtonElement | null;
+  countElement: HTMLElement | null;
+  rateElement: HTMLElement | null;
 
-  constructor(name: string, code_name: string, cost: number, rate: number) {
+  constructor(name: string, codeName: string, cost: number, rate: number) {
     this.name = name;
-    this.code_name = code_name;
+    this.codeName = codeName;
     this.cost = cost;
     this.rate = rate;
 
-    this.button_element = document.getElementById(
-      `button-${code_name}`,
+    this.buttonElement = document.getElementById(
+      `button-${codeName}`,
     ) as HTMLButtonElement;
-    if (this.button_element) {
-      this.button_element.addEventListener("click", () => {
-        console.log(`purchase button ${this.code_name} clicked!`);
-        burger_count.value -= this.cost;
+    if (this.buttonElement) {
+      this.buttonElement.addEventListener("click", () => {
+        console.log(`Purchase button ${this.codeName} clicked!`);
+        burgerCounter.value -= this.cost;
         this.count++;
-        this.cost *= PURHCASE_GROWTH_RATE;
+        this.cost *= PURCHASE_GROWTH_RATE;
       });
     }
 
-    this.count_element = document.getElementById(`count-${code_name}`);
-    this.rate_element = document.getElementById(`rate-${code_name}`);
+    this.countElement = document.getElementById(`count-${codeName}`);
+    this.rateElement = document.getElementById(`rate-${codeName}`);
 
     // update header name
-    const header_element = document.getElementById(`name-${code_name}`);
-    if (header_element) {
-      header_element.innerText = this.name;
+    const headerElement = document.getElementById(`name-${codeName}`);
+    if (headerElement) {
+      headerElement.innerText = this.name;
     }
   }
 
-  get per_sec_rate(): number {
+  get perSecondRate(): number {
     return this.count * this.rate;
   }
 
-  calc_addition(time_delta: number): number {
-    return time_delta * this.per_sec_rate;
+  calculateAddition(timeDelta: number): number {
+    return timeDelta * this.perSecondRate;
   }
 
   update(): void {
-    if (this.button_element) {
-      this.button_element.disabled = burger_count.value < this.cost;
+    if (this.buttonElement) {
+      this.buttonElement.disabled = burgerCounter.value < this.cost;
 
-      this.button_element.innerText = `${this.cost.toFixed(3)}`;
+      this.buttonElement.innerText = `${this.cost.toFixed(3)}`;
     }
-    if (this.count_element) {
-      this.count_element.innerText = this.count.toString();
+    if (this.countElement) {
+      this.countElement.innerText = this.count.toString();
     }
-    if (this.rate_element) {
-      this.rate_element.innerText = `${this.per_sec_rate.toFixed(3)}`;
+    if (this.rateElement) {
+      this.rateElement.innerText = `${this.perSecondRate.toFixed(3)}`;
     }
   }
 }
 
-
 const upgradables: Upgradable[] = [
-  new Upgradable("Grill Booster Pack", "a", 10, 0.1),
-  new Upgradable("Ingredient Refill Bundle", "b", 100, 2),
-  new Upgradable("Chef Assistant Boost", "c", 1000, 50),
-  new Upgradable("Gourmet Recipe Collection", "d", 5000, 200),
-  new Upgradable("Luxury Kitchen Upgrade", "e", 25000, 1000)
+  new Upgradable("Grill Booster Pack", "a", PURCHASE_A_COST, 0.1),
+  new Upgradable("Ingredient Refill Bundle", "b", PURCHASE_B_COST, 2),
+  new Upgradable("Chef Assistant Boost", "c", PURCHASE_C_COST, 50),
+  new Upgradable("Gourmet Recipe Collection", "d", PURCHASE_D_COST, 200),
+  new Upgradable("Luxury Kitchen Upgrade", "e", PURCHASE_E_COST, 1000)
 ];
-
-
 
 // main update loop
 
-let _last_time: number = performance.now();
-let time_delta: number = 0;
+let lastTime: number = performance.now();
+let timeDelta: number = 0;
 
-const total_rate_element = document.getElementById("rate-total");
-if (!total_rate_element) {
+const totalRateElement = document.getElementById("rate-total");
+if (!totalRateElement) {
   console.error("Total rate element not found.");
 }
 
 function update() {
-  time_delta = (performance.now() - _last_time) / 1000; // sec since last update
-  _last_time = performance.now();
+  timeDelta = (performance.now() - lastTime) / 1000; // sec since last update
+  lastTime = performance.now();
 
-  let total_addition = 0;
-  let total_rate = 0;
+  let totalAddition = 0;
+  let totalRate = 0;
   for (const upgradable of upgradables) {
     upgradable.update();
-    total_addition += upgradable.calc_addition(time_delta);
-    total_rate += upgradable.per_sec_rate;
+    totalAddition += upgradable.calculateAddition(timeDelta);
+    totalRate += upgradable.perSecondRate;
   }
 
-  burger_count.value += total_addition;
+  burgerCounter.value += totalAddition;
 
-  if (total_rate_element) {
-    total_rate_element.innerText = `${total_rate.toFixed(3)}`;
+  if (totalRateElement) {
+    totalRateElement.innerText = `${totalRate.toFixed(3)}`;
   }
 
-  burger_count.update();
+  burgerCounter.updateDisplay();
 
   requestAnimationFrame(update);
 }
