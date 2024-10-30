@@ -3,11 +3,6 @@ import "./style.css";
 // constant declaration
 const GAME_NAME = "Burger Cooking Mania";
 const INITIAL_BURGER_COUNT = 0;
-const PURCHASE_A_COST = 10;
-const PURCHASE_B_COST = 100;
-const PURCHASE_C_COST = 1000;
-const PURCHASE_D_COST = 5000;
-const PURCHASE_E_COST = 25000;
 const PURCHASE_GROWTH_RATE = 1.15;
 
 // set up HTML document & app
@@ -154,15 +149,18 @@ class Upgradable implements Item {
     }
   }
 
-  public get perSecondRate(): number { // make accessor public
+  public get perSecondRate(): number {
+    // make accessor public
     return this.count * this.rate;
   }
 
-  public calculateAddition(timeDelta: number): number { // make method public
+  public calculateAddition(timeDelta: number): number {
+    // make method public
     return timeDelta * this.perSecondRate;
   }
 
-  public update(): void { // make method public
+  public update(): void {
+    // make method public
     if (this.buttonElement) {
       this.buttonElement.disabled = burgerCounter.value < this.cost;
 
@@ -177,13 +175,20 @@ class Upgradable implements Item {
   }
 }
 
+const PURCHASE_COSTS = [
+  10, // cost for purchase A
+  100, // cost for purchase B
+  1000, // cost for purchase C
+  5000, // cost for purchase D
+  25000, // cost for purchase E
+];
 
-const upgradables: Upgradable[] = [
-  new Upgradable("Grill Booster Pack", "a", PURCHASE_A_COST, 0.1),
-  new Upgradable("Ingredient Refill Bundle", "b", PURCHASE_B_COST, 2),
-  new Upgradable("Chef Assistant Boost", "c", PURCHASE_C_COST, 50),
-  new Upgradable("Gourmet Recipe Collection", "d", PURCHASE_D_COST, 200),
-  new Upgradable("Luxury Kitchen Upgrade", "e", PURCHASE_E_COST, 1000),
+const upgradables = [
+  new Upgradable("Grill Booster Pack", "a", PURCHASE_COSTS[0], 0.1),
+  new Upgradable("Ingredient Refill Bundle", "b", PURCHASE_COSTS[1], 2),
+  new Upgradable("Chef Assistant Boost", "c", PURCHASE_COSTS[2], 50),
+  new Upgradable("Gourmet Recipe Collection", "d", PURCHASE_COSTS[3], 200),
+  new Upgradable("Luxury Kitchen Upgrade", "e", PURCHASE_COSTS[4], 1000),
 ];
 
 // main update loop
